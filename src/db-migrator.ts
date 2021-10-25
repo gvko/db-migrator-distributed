@@ -21,7 +21,8 @@ export default class DBMigrator {
                 migrationsLockTable = undefined,
                 logger = undefined,
                 firebaseAdmin = undefined,
-                firebaseMigrationsDirPath = undefined
+                firebaseMigrationsDirPath = undefined,
+                extraMigrationFuncParams = []
               }) {
     this.logger = logger || new Logger();
     this.sequelize = sequelizeConnection;
@@ -36,9 +37,9 @@ export default class DBMigrator {
       migrations: {
         /*
          * The params that get passed to the migrations `up` and `down` functions:
-         * (queryInterface, Sequelize)
+         * (queryInterface, Sequelize, ...)
          */
-        params: [this.sequelize.getQueryInterface(), this.sequelize.constructor],
+        params: [this.sequelize.getQueryInterface(), this.sequelize.constructor, ...extraMigrationFuncParams],
         /*
          * The path to the migrations dir, relative to the root dir
          */
