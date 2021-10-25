@@ -1,1 +1,1 @@
-# sequelize-migrator
+# db-migrator

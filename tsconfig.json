@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "lib": [
+      "es2016",
+      "ES2020.Promise",
+      "esnext.asynciterable",
+      "es6",
+      "dom",
+      "dom.iterable",
+      "scripthost",
+      "es2016.array.include"
+    ],
+    "allowUnreachableCode": false,
+    "declaration": true,
+    "alwaysStrict": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@localTypes/*": ["src/declarations/*"],
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*", "./test/**/*"]
+}
