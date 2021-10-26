@@ -181,4 +181,4 @@ class DBMigrator {
     }
 }
 exports.default = DBMigrator;
-//# sourceMappingURL=db-migrator.js.map
+//# sourceMappingURL=index.js.map

@@ -2,7 +2,7 @@
   "name": "db-migrator",
   "version": "0.0.1",
   "description": "A tool for executing DB migrations based on Sequelize and Umzug, capable of doing migrations among multiple, distributed, synchronously launched instances, by acquiring a greedy lock on a migration table.",
-  "main": "./dist/db-migrator.js",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gvko/db-migrator.git"
