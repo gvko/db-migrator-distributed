@@ -19,9 +19,7 @@ distributed, synchronously launched instances, by acquiring a greedy lock on a m
 ```typescript
 import DbMigrator from 'db-migrator';
 
-const dbMigrator = new DbMigrator({
-  sequelizeConnection: mySequelizeConn, logger: myLogger
-});
+const dbMigrator = new DbMigrator({ sequelizeConnection: mySequelizeConn });
 try {
   await dbMigrator.run();
 } catch (err) {
