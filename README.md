@@ -39,11 +39,11 @@ try {
   **Default:** `'_migrations'`
 
 * `migrationsLockTable {string}` *(optional)* The DB table that is going to be used for acquiring the migrations
-  lock. **Default:**  `'_migrations_lock'`
+  lock. **Default:** `'_migrations_lock'`
 
-* `migrationsDirPath {string}` *(optional)* The dir path where you store your migrations files. **Default:**
-  `dist/migrations`. If you don't use Typescript or a separate `/dist` dir for the compiled TS files, then `dist` won't
-  make sense for you.
+* `migrationsDirPath {string}` *(optional)* The dir path where you store your migrations files.
+  **Default:** `'dist/migrations'`. If you don't use Typescript or a separate `/dist` dir for the compiled TS files,
+  then `dist` won't make sense for you.
 
 * `migrationFilesPattern {RegEx | string}` *(optional)* The regex by which Umzug will determine whether a file in your
   migrations dir is an actual migration file that is to be executed. **Default:** `/^\d+[\w-_]+\.js$/` . This would
