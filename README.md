@@ -35,19 +35,25 @@ try {
 
 ## List possible init params
 
-* `sequelizeConnection {Sequelize}` (mandatory) The Sequelize connection instance that you use to connect to your DB
-* `migrationsTable {string}`  (optional) The DB table where Umzug keeps track of the executed migrations so far. **
-  Default:** `'_migrations'`
-* `migrationsLockTable {string}` (optional) The DB table that is going to be used for acquiring the migrations lock. **
-  Default:**  `'_migrations_lock'`
-* `migrationsDirPath {string}` (optional) The dir path where you store your migrations files. **
-  Default:** `dist/migrations`. If you don't use Typescript or a separate `/dist` dir for the compiled TS files,
-  then `dist` won't make sense for you.
-* `migrationFilesPattern {RegEx | string}` (optional) The regex by which Umzug will determine whether a file in your
+* `sequelizeConnection {Sequelize}` *(mandatory)* The Sequelize connection instance that you use to connect to your DB
+
+* `migrationsTable {string}` *(optional)* The DB table where Umzug keeps track of the executed migrations so far.
+  **Default:** `'_migrations'`
+
+* `migrationsLockTable {string}` *(optional)* The DB table that is going to be used for acquiring the migrations
+  lock. **Default:**  `'_migrations_lock'`
+
+* `migrationsDirPath {string}` *(optional)* The dir path where you store your migrations files. **Default:**
+  `dist/migrations`. If you don't use Typescript or a separate `/dist` dir for the compiled TS files, then `dist` won't
+  make sense for you.
+
+* `migrationFilesPattern {RegEx | string}` *(optional)* The regex by which Umzug will determine whether a file in your
   migrations dir is an actual migration file that is to be executed. **Default:** `/^\d+[\w-_]+\.js$/` . This would
   match for example `20200330092617-create-users-table.js`
-* `extraMigrationFuncParams {unknown[]}` (optional) Params, values, objects that you want to pass to your `up()`
+
+* `extraMigrationFuncParams {unknown[]}` *(optional)* Params, values, objects that you want to pass to your `up()`
   and `down()` migrations execution functions. By default, the first two params will be the Sequelize `queryInterface`
   and the Sequelize instance.
-* `loggger {any}` (optional) A logger that you want to use that the migrator will also use to log events. The default
+
+* `loggger {any}` *(optional)* A logger that you want to use that the migrator will also use to log events. The default
   one is `bunyan` and it's set up to log to the console, so you don't have to provide anything, if you wish.

@@ -5,18 +5,19 @@ const logger_1 = require("./logger");
 const error_handler_1 = require("./error-handler");
 const fireway = require("fireway");
 class DBMigrator {
-    constructor({ sequelizeConnection, migrationTable = undefined, migrationsDirPath = undefined, migrationFilesPattern = undefined, migrationsLockTable = undefined, logger = undefined, firebaseAdmin = undefined, firebaseMigrationsDirPath = undefined, extraMigrationFuncParams = [] }) {
+    constructor({ sequelizeConnection, migrationsTable = '_migrations', migrationsLockTable = '_migrations_lock', migrationsDirPath = 'dist/migrations', migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
+    logger = undefined, firebaseAdmin = undefined, firebaseMigrationsDirPath = undefined, extraMigrationFuncParams = [] }) {
         this.lockAttempts = 1;
         this.releaseAttempts = 1;
         this.logger = logger || new logger_1.default();
         this.sequelize = sequelizeConnection;
-        this.migrationsLockTable = migrationsLockTable || '_migrations_lock';
+        this.migrationsLockTable = migrationsLockTable;
         this.umzug = new Umzug({
             storage: 'sequelize',
             logging: this.logger.info.bind(this.logger),
             storageOptions: {
                 sequelize: sequelizeConnection,
-                tableName: migrationTable
+                tableName: migrationsTable
             },
             migrations: {
                 /*
@@ -27,11 +28,11 @@ class DBMigrator {
                 /*
                  * The path to the migrations dir, relative to the root dir
                  */
-                path: migrationsDirPath || 'dist/migrations',
+                path: migrationsDirPath,
                 /*
                  *  The pattern that determines whether or not a file is a migration.
                  */
-                pattern: migrationFilesPattern || /^\d+[\w-_]+\.js$/ // eslint-disable-line
+                pattern: migrationFilesPattern
             }
         });
         this.firebaseAdmin = firebaseAdmin;

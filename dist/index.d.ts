@@ -7,12 +7,13 @@ export default class DBMigrator {
     private readonly firebaseMigrationsDirPath;
     private lockAttempts;
     private releaseAttempts;
-    constructor({ sequelizeConnection, migrationTable, migrationsDirPath, migrationFilesPattern, migrationsLockTable, logger, firebaseAdmin, firebaseMigrationsDirPath, extraMigrationFuncParams }: {
+    constructor({ sequelizeConnection, migrationsTable, migrationsLockTable, migrationsDirPath, migrationFilesPattern, // eslint-disable-line
+    logger, firebaseAdmin, firebaseMigrationsDirPath, extraMigrationFuncParams }: {
         sequelizeConnection: any;
-        migrationTable?: any;
-        migrationsDirPath?: any;
-        migrationFilesPattern?: any;
-        migrationsLockTable?: any;
+        migrationsTable?: string;
+        migrationsLockTable?: string;
+        migrationsDirPath?: string;
+        migrationFilesPattern?: RegExp;
         logger?: any;
         firebaseAdmin?: any;
         firebaseMigrationsDirPath?: any;
