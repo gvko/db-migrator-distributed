@@ -49,7 +49,7 @@ try {
   migrations dir is an actual migration file that is to be executed. **Default:** `/^\d+[\w-_]+\.js$/` . This would
   match for example `20200330092617-create-users-table.js`
 
-* `extraMigrationFuncParams {unknown[]}` *(optional)* Params, values, objects that you want to pass to your `up()`
+* `extraMigrationFuncParams {any[]}` *(optional)* Params, values, objects that you want to pass to your `up()`
   and `down()` migrations execution functions. By default, the first two params will be the Sequelize `queryInterface`
   and the Sequelize instance.
 
