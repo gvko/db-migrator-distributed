@@ -15,10 +15,10 @@ export default class DBMigrator {
 
   constructor({
                 sequelizeConnection,
-                migrationTable = undefined,
-                migrationsDirPath = undefined,
-                migrationFilesPattern = undefined,
-                migrationsLockTable = undefined,
+                migrationsTable = '_migrations',
+                migrationsLockTable = '_migrations_lock',
+                migrationsDirPath = 'dist/migrations',
+                migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
                 logger = undefined,
                 firebaseAdmin = undefined,
                 firebaseMigrationsDirPath = undefined,
@@ -26,13 +26,13 @@ export default class DBMigrator {
               }) {
     this.logger = logger || new Logger();
     this.sequelize = sequelizeConnection;
-    this.migrationsLockTable = migrationsLockTable || '_migrations_lock';
+    this.migrationsLockTable = migrationsLockTable;
     this.umzug = new Umzug({
       storage: 'sequelize',
       logging: this.logger.info.bind(this.logger),
       storageOptions: {
         sequelize: sequelizeConnection,
-        tableName: migrationTable
+        tableName: migrationsTable
       },
       migrations: {
         /*
@@ -43,11 +43,11 @@ export default class DBMigrator {
         /*
          * The path to the migrations dir, relative to the root dir
          */
-        path: migrationsDirPath || 'dist/migrations',
+        path: migrationsDirPath,
         /*
          *  The pattern that determines whether or not a file is a migration.
          */
-        pattern: migrationFilesPattern || /^\d+[\w-_]+\.js$/ // eslint-disable-line
+        pattern: migrationFilesPattern
       }
     });
     this.firebaseAdmin = firebaseAdmin;
