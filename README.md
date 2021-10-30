@@ -1,23 +1,33 @@
-# db-migrator
+# db-migrator-distributed
 
 # About
 
-A tool for executing DB migrations based on Sequelize and Umzug, capable of doing migrations among multiple,
-distributed, synchronously launched instances, by acquiring a greedy lock on a migration table.
+A tool for executing DB migrations based on Sequelize and Umzug.
+
+The tool is safely executing migrations among distributed, synchronously launched server instances, by acquiring a
+greedy lock on a migration table.
 
 # Getting started
 
-1. Install the package by putting it in your `package.json` dependencies and running `npm i`:
+1. Install the package:
+
+by:
+
+```bash
+npm i db-migrator-distributed
+```
+
+or by putting it in your `package.json` dependencies and running `npm i`
 
 ```json
-    "db-migrator": "git+https://github.com/gvko/db-migrator.git",
+    "db-migrator-distributed": "git+https://github.com/gvko/db-migrator-distributed.git",
 ```
 
 2. In the file where you want to execute the migrations (usually the starting point of your server), import the lib and
    instantiate the migrator:
 
 ```typescript
-import DbMigrator from 'db-migrator';
+import DbMigrator from 'db-migrator-distributed';
 
 const dbMigrator = new DbMigrator({ sequelizeConnection: mySequelizeConn });
 try {
