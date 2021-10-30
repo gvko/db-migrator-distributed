@@ -7,6 +7,14 @@ A tool for executing DB migrations based on Sequelize and Umzug.
 The tool is safely executing migrations among distributed, synchronously launched server instances, by acquiring a
 greedy lock on a migration table.
 
+### Production tested
+
+The tool has been tested and currently used in production env of one project.
+
+It has been successfully tested with up to 6 simultaneously deployed instances.
+
+Currently only tested with Postgres sequelize connection.
+
 # Getting started
 
 1. Install the package:
