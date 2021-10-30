@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gvko/db-migrator.git"
+    "url": "git+https://github.com/gvko/db-migrator-distributed.git"
   },
   "keywords": [
     "node",
@@ -21,9 +21,9 @@
   "author": "Galin Kostov <dev@galin.cc>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gvko/db-migrator/issues"
+    "url": "https://github.com/gvko/db-migrator-distributed/issues"
   },
-  "homepage": "https://github.com/gvko/db-migrator#readme",
+  "homepage": "https://github.com/gvko/db-migrator-distributed#readme",
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "npx eslint --ext ts ./src",
