@@ -2,7 +2,8 @@
 
 # About
 
-A tool for executing DB migrations based on Sequelize and Umzug.
+A tool for executing DB migrations based on [Umzug](https://www.npmjs.com/package/umzug) (
+and [Sequelize](https://www.npmjs.com/package/sequelize)). Coming support for Firestore migrations...
 
 The tool is safely executing migrations among distributed, synchronously launched server instances, by acquiring a
 greedy lock on a migration table.
@@ -19,16 +20,8 @@ Currently only tested with Postgres sequelize connection.
 
 1. Install the package:
 
-by:
-
 ```bash
 npm i db-migrator-distributed
-```
-
-or by putting it in your `package.json` dependencies and running `npm i`
-
-```json
-    "db-migrator-distributed": "git+https://github.com/gvko/db-migrator-distributed.git",
 ```
 
 2. In the file where you want to execute the migrations (usually the starting point of your server), import the lib and
@@ -73,3 +66,9 @@ try {
 
 * `loggger {any}` *(optional)* A logger that you want to use that the migrator will also use to log events. The default
   one is `bunyan` and it's set up to log to the console, so you don't have to provide anything, if you wish.
+
+# TODO
+
+* Finish support of Firestore migrations
+* Add support for rollback functionality
+* Test for other dialects, eg. MySQL
