@@ -52,6 +52,9 @@ try {
 * `migrationsLockTable {string}` *(optional)* The DB table that is going to be used for acquiring the migrations
   lock. **Default:** `'_migrations_lock'`
 
+* `lockTimeoutSeconds {number}` *(optional)* The time (in seconds) after which locks should expire.
+  **Default:** `60`
+
 * `migrationsDirPath {string}` *(optional)* The dir path where you store your migrations files.
   **Default:** `'dist/migrations'`. If you don't use Typescript or a separate `/dist` dir for the compiled TS files,
   then `dist` won't make sense for you.
