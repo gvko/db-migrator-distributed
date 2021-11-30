@@ -1,6 +1,6 @@
 {
   "name": "db-migrator-distributed",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A tool for executing DB migrations based on Sequelize and Umzug. Safely executes migrations among distributed, synchronously launched server instances, by acquiring a greedy lock on a migration table.",
   "main": "./dist/index.js",
   "repository": {
