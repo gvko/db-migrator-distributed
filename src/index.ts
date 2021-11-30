@@ -166,7 +166,7 @@ export default class DBMigrator {
     }
 
     /*
-     * If lock has been acquired more than a minute ago, then it must be stuck. Release and try again.
+     * If lock has been acquired more than `lockTimeoutSeconds` ago, then it must be stuck. Release and try again.
      * Otherwise, it has been acquired by another instance of the service that is executing the migrations right now.
      */
     if (lockAcquiredAt) {
