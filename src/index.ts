@@ -8,6 +8,7 @@ export default class DBMigrator {
   private readonly umzug;
   private readonly sequelize;
   private readonly migrationsLockTable: string;
+  private readonly lockTimeoutSeconds: number;
   private readonly firebaseAdmin;
   private readonly firebaseMigrationsDirPath: string;
   private lockAttempts = 1;
@@ -17,6 +18,7 @@ export default class DBMigrator {
                 sequelizeConnection,
                 migrationsTable = '_migrations',
                 migrationsLockTable = '_migrations_lock',
+                lockTimeoutSeconds = 60,
                 migrationsDirPath = 'dist/migrations',
                 migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
                 logger = undefined,
@@ -27,6 +29,7 @@ export default class DBMigrator {
     this.logger = logger || new Logger();
     this.sequelize = sequelizeConnection;
     this.migrationsLockTable = migrationsLockTable;
+    this.lockTimeoutSeconds = lockTimeoutSeconds;
     this.umzug = new Umzug({
       storage: 'sequelize',
       logging: this.logger.info.bind(this.logger),
@@ -163,11 +166,11 @@ export default class DBMigrator {
     }
 
     /*
-     * If lock has been acquired more than a minute ago, then it must be stuck. Release and try again.
+     * If lock has been acquired more than `lockTimeoutSeconds` ago, then it must be stuck. Release and try again.
      * Otherwise, it has been acquired by another instance of the service that is executing the migrations right now.
      */
     if (lockAcquiredAt) {
-      if ((Number(new Date()) - Number(new Date(lockAcquiredAt))) > 60 * 1000) {
+      if ((Number(new Date()) - Number(new Date(lockAcquiredAt))) > this.lockTimeoutSeconds * 1000) {
         this.logger.warn({}, 'Lock is stuck. Releasing and acquiring over...');
         await this.releaseLock();
         return await this.acquireLock();

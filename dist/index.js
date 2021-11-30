@@ -5,13 +5,14 @@ const logger_1 = require("./logger");
 const error_handler_1 = require("./error-handler");
 const fireway = require("fireway");
 class DBMigrator {
-    constructor({ sequelizeConnection, migrationsTable = '_migrations', migrationsLockTable = '_migrations_lock', migrationsDirPath = 'dist/migrations', migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
+    constructor({ sequelizeConnection, migrationsTable = '_migrations', migrationsLockTable = '_migrations_lock', lockTimeoutSeconds = 60, migrationsDirPath = 'dist/migrations', migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
     logger = undefined, firebaseAdmin = undefined, firebaseMigrationsDirPath = undefined, extraMigrationFuncParams = [] }) {
         this.lockAttempts = 1;
         this.releaseAttempts = 1;
         this.logger = logger || new logger_1.default();
         this.sequelize = sequelizeConnection;
         this.migrationsLockTable = migrationsLockTable;
+        this.lockTimeoutSeconds = lockTimeoutSeconds;
         this.umzug = new Umzug({
             storage: 'sequelize',
             logging: this.logger.info.bind(this.logger),
@@ -137,11 +138,11 @@ class DBMigrator {
             throw new error_handler_1.GeneralError(err.message);
         }
         /*
-         * If lock has been acquired more than a minute ago, then it must be stuck. Release and try again.
+         * If lock has been acquired more than `lockTimeoutSeconds` ago, then it must be stuck. Release and try again.
          * Otherwise, it has been acquired by another instance of the service that is executing the migrations right now.
          */
         if (lockAcquiredAt) {
-            if ((Number(new Date()) - Number(new Date(lockAcquiredAt))) > 60 * 1000) {
+            if ((Number(new Date()) - Number(new Date(lockAcquiredAt))) > this.lockTimeoutSeconds * 1000) {
                 this.logger.warn({}, 'Lock is stuck. Releasing and acquiring over...');
                 await this.releaseLock();
                 return await this.acquireLock();
