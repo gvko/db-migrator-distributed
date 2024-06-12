@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Umzug = require("umzug");
 const logger_1 = require("./logger");
 const error_handler_1 = require("./error-handler");
-const fireway = require("fireway");
 class DBMigrator {
     constructor({ sequelizeConnection, migrationsTable = '_migrations', migrationsLockTable = '_migrations_lock', lockTimeoutSeconds = 60, migrationsDirPath = 'dist/migrations', migrationFilesPattern = /^\d+[\w-_]+\.js$/, // eslint-disable-line
-    logger = undefined, firebaseAdmin = undefined, firebaseMigrationsDirPath = undefined, extraMigrationFuncParams = [] }) {
+    logger = undefined, extraMigrationFuncParams = [] }) {
         this.lockAttempts = 1;
         this.releaseAttempts = 1;
         this.logger = logger || new logger_1.default();
@@ -36,8 +35,6 @@ class DBMigrator {
                 pattern: migrationFilesPattern
             }
         });
-        this.firebaseAdmin = firebaseAdmin;
-        this.firebaseMigrationsDirPath = firebaseMigrationsDirPath || 'dist/firebase-migrations';
     }
     /**
      * Combines all functions that need to be executed in sequence in order to run the migration process.
@@ -53,9 +50,6 @@ class DBMigrator {
             const lockAcquired = await this.acquireLock();
             if (lockAcquired) {
                 await this.executeMigrations();
-                if (this.firebaseAdmin) {
-                    await this.executeFirestoreMigrations();
-                }
                 await this.releaseLock();
             }
         }
@@ -102,24 +96,8 @@ class DBMigrator {
         }
     }
     /**
-     * Executes the pending migrations in Firestore
-     */
-    async executeFirestoreMigrations() {
-        try {
-            const firebaseApp = this.firebaseAdmin.app();
-            const result = await fireway.migrate({ path: this.firebaseMigrationsDirPath, app: firebaseApp });
-            const resultText = result.executedFilesCount > 0
-                ? 'Firestore migrations have been migrated successfully!'
-                : 'No Firestore migrations needed to be executed!';
-            this.logger.info(result, resultText);
-        }
-        catch (err) {
-            throw new error_handler_1.GeneralError(err.message, { err, subModule: 'db-migrator' });
-        }
-    }
-    /**
-     * Acquires a lock for establishing dominance in order to execute the migrations
-     */
+    * Acquires a lock for establishing dominance in order to execute the migrations
+    */
     async acquireLock() {
         var _a;
         let lockAcquiredAt;
