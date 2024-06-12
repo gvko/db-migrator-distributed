@@ -1,5 +1,4 @@
-import * as bunyan from 'bunyan';
-import * as bunyanPretty from 'bunyan-pretty';
+import * as winston from 'winston';
 
 enum LogLevel {
   ERROR = 'error',
@@ -9,75 +8,62 @@ enum LogLevel {
 }
 
 const levelNumbers = {
-  20: LogLevel.DEBUG,
-  30: LogLevel.INFO,
-  40: LogLevel.WARN,
-  50: LogLevel.ERROR
+  debug: LogLevel.DEBUG,
+  info: LogLevel.INFO,
+  warn: LogLevel.WARN,
+  error: LogLevel.ERROR
 };
 
-/**
- * Creates and initializes the logger object.
- */
 export default class Logger {
-  private readonly logger: bunyan;
+  private readonly logger: winston.Logger;
 
   constructor() {
     const level: LogLevel = LogLevel.INFO;
-    const consoleStream = {
-      formatter: 'pretty',
-      level,
-      stream: bunyanPretty()
-    };
 
-    this.logger = bunyan.createLogger({
-      name: 'db-migrator',
-      streams: [consoleStream]
+    this.logger = winston.createLogger({
+      level: level,
+      format: winston.format.json(),
+      transports: [new winston.transports.Console()],
+      defaultMeta: { service: 'db-migration' },
     });
   }
 
   getLevel(): LogLevel {
-    return levelNumbers[this.logger.level()];
+    return levelNumbers[this.logger.level] as LogLevel;
   }
 
-  setLevel(): void {
+  setLevel(level: LogLevel): void {
+    this.logger.level = level;
   }
 
-  setName(): void {
-  }
-
-  child(props: object): object {
+  child(props: object): winston.Logger {
     return this.logger.child(props);
   }
 
   debug(data: object, message = 'Debug'): void {
-    this.logger.debug(data, message);
+    this.logger.debug(message, data);
   }
 
   info(data: object, message = 'Info'): void {
-    this.logger.info(data, message);
+    this.logger.info(message, data);
   }
 
   warn(data: object, message = 'Warning'): void {
-    this.logger.warn(data, message);
+    this.logger.warn(message, data);
   }
 
   error(data: object | any, message = 'Internal Server Error'): void {
     if (!data.err) {
-      this.logger.error(data, message);
+      this.logger.error(message, data);
     } else {
       const error = {
         message: data.err.message,
         data: data.err.data
       };
 
-      /*
-       * Bunyan (the logging library in use) filters objects from redundant data. The error stack trace is being
-       * filtered, if passed as an object. That's why we strip it out as an array of strings.
-       * We only send the stack trace to the logs, but not in the response to the client.
-       */
       const stack = data.err.stack !== undefined ? data.err.stack.toString().split('\n') : undefined;
 
-      this.logger.error({ error, stack }, data.err.message);
+      this.logger.error(data.err.message);
     }
   }
 }
